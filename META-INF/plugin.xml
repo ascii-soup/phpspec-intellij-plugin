@@ -1,0 +1,59 @@
+<idea-plugin version="2">
+  <id>asciisoup.phpstorm.phpspec</id>
+  <name>phpspec support</name>
+  <version>0.1</version>
+  <vendor email="nils.luxton@gmail.com" url="https://github.com/ascii-soup/phpspec-intellij-plugin">ASCII Soup</vendor>
+
+  <description><![CDATA[
+      - phpspec test runner (basic)
+      <br>
+      - completion for subject methods on $this in spec
+      <br>
+      - phpspec file type for *Spec.php files
+      ]]></description>
+
+  <change-notes><![CDATA[
+      This is an ALPHA at best.
+      <br>
+      There <em>will</em> be bugs. Please report them on github.
+      <br>
+      This has only currently been tested in IntelliJ 13.1 but should work in 13,
+      and PhpStorm versions 7 + 8
+      ]]>
+  </change-notes>
+
+  <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
+  <idea-version since-build="133"/>
+
+  <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+       on how to target different products -->
+  <depends>com.jetbrains.php</depends>
+  <depends>com.intellij.modules.lang</depends>
+
+  <application-components>
+    <!-- Add your application components here -->
+      <component>
+          <implementation-class>asciisoup.phpstorm.phpspec.PhpSpecApplication</implementation-class>
+      </component>
+  </application-components>
+
+  <project-components>
+    <!-- Add your project components here -->
+      <component>
+          <implementation-class>asciisoup.phpstorm.phpspec.PhpSpecProject</implementation-class>
+      </component>
+  </project-components>
+
+  <actions>
+    <!-- Add your actions here -->
+  </actions>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- Add your extensions here -->
+      <configurationType implementation="asciisoup.phpstorm.phpspec.runner.ConfigurationType"/>
+      <programRunner implementation="asciisoup.phpstorm.phpspec.runner.SpecRunner"/>
+      <completion.contributor implementationClass="asciisoup.phpstorm.phpspec.completion.SubjectContributor" id="phpspec_subject_contributor" language="PHP" order="FIRST"/>
+      <php.typeProvider2 implementation="asciisoup.phpstorm.phpspec.references.SubjectTypeProvider"/>
+      <fileTypeFactory implementation="asciisoup.phpstorm.phpspec.files.PhpSpecFileTypeFactory"/>
+  </extensions>
+</idea-plugin>
