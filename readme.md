@@ -57,6 +57,9 @@ Use the "TeamCityFormatter" branch of my [phpspec fork](https://github.com/ascii
 	           "url": "https://github.com/ascii-soup/phpspec"
 	       }
     ],
+    "config": {
+        "bin-dir": "bin/"
+    },
     "require":
     {
         "phpspec/phpspec": "dev-TeamCityFormatter"
