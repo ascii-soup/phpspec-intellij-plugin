@@ -1,4 +1,4 @@
-package asciisoup.phpstorm.phpspec.runner;
+package asciisoup.phpstorm.phpspec.references;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
