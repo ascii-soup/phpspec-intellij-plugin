@@ -44,12 +44,30 @@ Planned / Suggested Features
 
 Installation Instructions
 -------------------------
-1. Use the "TeamCityFormatter" branch of my phpspec fork found at https://github.com/ascii-soup/phpspec/tree/TeamCityFormatter (see composer docs for using custom repos for packages)
-2. Copy the phpspec-support.jar file from this repository into your local config directory:
-- ~/.IntelliJIdea13/config/plugins/phpspec-support.jar (IntelliJ)
-- ~/.WebIde7/config/plugins/phpspec-support.jar (PhpStorm 7)
-- ~/.WebIde8/config/plugins/phpspec-support.jar (PhpStorm 8)
-3. Start your IDE
-4. Create a new run configuration - you should see "phpspec" as an option
+
+### PhpSpec
+
+Use the "TeamCityFormatter" branch of my [phpspec fork](https://github.com/ascii-soup/phpspec/tree/TeamCityFormatter) for your project:
+
+```
+{
+    "repositories": [
+	       {
+	           "type": "vcs",
+	           "url": "https://github.com/ascii-soup/phpspec"
+	       }
+    ],
+    "require":
+    {
+        "phpspec/phpspec": "dev-TeamCityFormatter"
+    }
+}
+```
+
+### Install the plugin
+
+1. Download the file [phpspec-support.jar](phpspec-support.jar) from this repository
+2. Open PhpStorm -> Configure -> Plugins -> Install plugin from disk -> select the downloaded jar file.
+3. Create a new run configuration - you should see "phpspec" as an option
 5. Run!
 6. Report bugs here on github: https://github.com/ascii-soup/phpspec-intellij-plugin/issues
