@@ -63,6 +63,11 @@ Use the "TeamCityFormatter" branch of my [phpspec fork](https://github.com/ascii
     "require":
     {
         "phpspec/phpspec": "dev-TeamCityFormatter"
+    },
+    "autoload": {
+        "psr-0": {
+            "": "src"
+        }
     }
 }
 ```
