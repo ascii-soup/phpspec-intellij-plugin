@@ -15,7 +15,7 @@ public class SubjectLookupElementDecorator extends LookupElementDecorator {
     @Override
     public void renderElement(LookupElementPresentation presentation) {
         super.renderElement(presentation);
-        presentation.setIcon(Resources.SMALL_ICON);
         presentation.appendTailText(" from " + ((Method)getDelegate().getPsiElement()).getContainingClass().getPresentableFQN(), true);
+        presentation.setTypeText(presentation.getTypeText(), Resources.SMALL_ICON);
     }
 }
