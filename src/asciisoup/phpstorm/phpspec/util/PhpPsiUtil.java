@@ -6,6 +6,8 @@ import com.intellij.psi.PsiElement;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 
+import java.util.Collection;
+
 public class PhpPsiUtil {
     public static PhpClass getFirstPhpClassIn(PsiElement psiElement) {
 
@@ -36,6 +38,12 @@ public class PhpPsiUtil {
     }
 
     private static PhpClass doFindClassByFQN(Project project, String fullyQualifiedName) {
-        return ((PhpClass) PhpIndex.getInstance(project).getClassesByFQN(fullyQualifiedName).toArray()[0]);
+        PhpIndex phpIndex = PhpIndex.getInstance(project);
+        Collection<PhpClass> phpClasses = phpIndex.getClassesByFQN(fullyQualifiedName);
+        if (phpClasses.isEmpty()) {
+            return null;
+        }
+
+        return ((PhpClass) phpClasses.toArray()[0]);
     }
 }

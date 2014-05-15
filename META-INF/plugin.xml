@@ -50,10 +50,12 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <!-- Add your extensions here -->
+
       <configurationType implementation="asciisoup.phpstorm.phpspec.runner.ConfigurationType"/>
       <programRunner implementation="asciisoup.phpstorm.phpspec.runner.SpecRunner"/>
       <completion.contributor implementationClass="asciisoup.phpstorm.phpspec.completion.SubjectContributor" id="phpspec_subject_contributor" language="PHP" order="FIRST"/>
       <php.typeProvider2 implementation="asciisoup.phpstorm.phpspec.references.SubjectTypeProvider"/>
       <fileTypeFactory implementation="asciisoup.phpstorm.phpspec.files.PhpSpecFileTypeFactory"/>
+      <projectConfigurable implementation="asciisoup.phpstorm.phpspec.configuration.Configuration"/>
   </extensions>
 </idea-plugin>
