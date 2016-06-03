@@ -42,8 +42,9 @@ public class RunProfileState extends CommandLineState {
     @NotNull
     @Override
     protected ProcessHandler startProcess() throws ExecutionException {
-        GeneralCommandLine commandLine = new GeneralCommandLine("bin/phpspec");
+        GeneralCommandLine commandLine = new GeneralCommandLine("vendor/bin/phpspec");
         commandLine.addParameter("run");
+        commandLine.addParameter("--config=phpspec.yml");
         commandLine.addParameter("--format=teamcity");
 
         //GeneralCommandLine commandLine = new GeneralCommandLine("vendor/testing");

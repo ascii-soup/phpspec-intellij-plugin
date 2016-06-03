@@ -18,6 +18,6 @@ public class PhpSpecUtil {
     }
 
     public static boolean classIsSpec(PhpClass phpClass) {
-        return phpClass.getName().endsWith("Spec");
+        return phpClass != null && phpClass.getName().endsWith("Spec");
     }
 }
