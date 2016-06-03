@@ -1,5 +1,6 @@
 package asciisoup.phpstorm.phpspec.runner;
 
+import asciisoup.phpstorm.phpspec.PhpSpecProject;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.RunConfigurationBase;
@@ -16,14 +17,17 @@ import java.awt.*;
 
 public class RunConfiguration extends RunConfigurationBase {
 
+    private final Project project;
+
     public RunConfiguration(Project project, com.intellij.execution.configurations.ConfigurationFactory factory, String name) {
         super(project, factory, name);
+        this.project = project;
     }
 
     @Nullable
     @Override
     public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws ExecutionException {
-        return new RunProfileState(env);
+        return new RunProfileState(env, project.getComponent(PhpSpecProject.class));
     }
 
     @NotNull

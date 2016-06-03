@@ -1,5 +1,6 @@
 package asciisoup.phpstorm.phpspec;
 
+import asciisoup.phpstorm.phpspec.configuration.Configuration;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
@@ -7,8 +8,14 @@ import org.jetbrains.annotations.NotNull;
 public class PhpSpecProject implements ProjectComponent {
     private boolean methodLock = false;
 
-    public PhpSpecProject(Project project) {
+    private Configuration config;
 
+    public PhpSpecProject(Project project) {
+        config = new Configuration(project);
+    }
+
+    public Configuration getConfig() {
+        return config;
     }
 
     public void initComponent() {

@@ -32,19 +32,21 @@ import java.util.regex.Pattern;
 public class RunProfileState extends CommandLineState {
 
     private final ExecutionEnvironment environment;
+    private final PhpSpecProject phpSpecProject;
     private ProcessHandler processHandler;
 
-    public RunProfileState(ExecutionEnvironment environment) {
+    public RunProfileState(ExecutionEnvironment environment, PhpSpecProject phpSpecProject) {
         super(environment);
         this.environment = environment;
+        this.phpSpecProject = phpSpecProject;
     }
 
     @NotNull
     @Override
     protected ProcessHandler startProcess() throws ExecutionException {
-        GeneralCommandLine commandLine = new GeneralCommandLine("vendor/bin/phpspec");
+        GeneralCommandLine commandLine = new GeneralCommandLine(phpSpecProject.getConfig().binaryPath());
         commandLine.addParameter("run");
-        commandLine.addParameter("--config=phpspec.yml");
+//        commandLine.addParameter("--config=phpspec.yml");
         commandLine.addParameter("--format=teamcity");
 
         //GeneralCommandLine commandLine = new GeneralCommandLine("vendor/testing");
@@ -68,63 +70,15 @@ public class RunProfileState extends CommandLineState {
     @Nullable
     @Override
     protected ConsoleView createConsole(@NotNull final Executor executor) throws ExecutionException {
-        BaseTestsOutputConsoleView console = SMTestRunnerConnectionUtil.createAndAttachConsole(
+        return SMTestRunnerConnectionUtil.createAndAttachConsole(
                 "phpspec",
                 processHandler,
                 new SMTRunnerConsoleProperties(
                         environment.getRunnerAndConfigurationSettings().getConfiguration(),
                         "phpspec",
                         environment.getExecutor()
-                ),
-                environment
+                )
         );
-        console.addMessageFilter(new Filter() {
-            @Nullable
-            @Override
-            public Result applyFilter(String line, int entireLength) {
-                Pattern p = Pattern.compile("^Method (.+)::(.+) not found\\.$");
-                final Matcher m = p.matcher(line);
-
-                if (m.find()) {
-                    final PhpSpecProject phpSpecProject = environment.getProject().getComponent(PhpSpecProject.class);
-                    if (!phpSpecProject.canAddSubjectMethod()) {
-                        return null;
-                    }
-                    phpSpecProject.lockCreatingSubjectMethods();
-
-                    if (Messages.showYesNoDialog("Do you want to create " + m.group(1) + "->" + m.group(2) + "?", "Create Method?", null) == Messages.YES) {
-
-                        final PhpClass phpClass = PhpPsiUtil.findClassByFQN(environment.getProject(), m.group(1));
-                        if (phpClass != null) {
-                            PhpSpecApplication.getApplication().runWriteAction(new Runnable() {
-                                @Override
-                                public void run() {
-                                    new WriteCommandAction(phpClass.getProject(), phpClass.getContainingFile()) {
-                                        @Override
-                                        protected void run(@NotNull com.intellij.openapi.application.Result result) throws Throwable {
-                                            PsiElement brace = phpClass.getLastChild();
-                                            if (brace != null) {
-                                                Method method = PhpPsiElementFactory.createMethod(phpClass.getProject(), "public function " + m.group(2) + "() {\n\n}");
-                                                CodeStyleManager styleManager = CodeStyleManager.getInstance(getProject());
-                                                styleManager.reformat(method);
-                                                PsiElement newMethod = phpClass.addBefore(method, brace);
-                                                PsiNavigateUtil.navigate(newMethod);
-                                                phpSpecProject.unlockCreatingSubjectMethods();
-                                                ProgramRunnerUtil.executeConfiguration(environment.getProject(), environment.getRunnerAndConfigurationSettings(), executor);
-                                            }
-                                        }
-                                    }.execute();
-                                }
-                            });
-                        }
-                    } else {
-                        phpSpecProject.unlockCreatingSubjectMethods();
-                    }
-                }
-                return null;
-            }
-        });
-        return console;
     }
 
 }
